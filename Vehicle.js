@@ -8,6 +8,7 @@ class Vehicle {
 
     /**
      * Creates new vehicle with specified:
+     * name, weight, volume, carryingVolume, carryingWeight.
      * @param name.
      * @param weight.
      * @param volume.
@@ -33,11 +34,32 @@ class Vehicle {
             throw "Carrying volume parameter must be positive";
         }
 
-        this.name = "" + name;
-        this.weight = +weight;
-        this.volume = +volume;
-        this.carryingWeight = +carryingWeight;
-        this.carryingVolume = +carryingVolume;
+        this._name = name;
+        this._weight = weight;
+        this._volume = volume;
+        this._carryingWeight = carryingWeight;
+        this._carryingVolume = carryingVolume;
+    }
+
+
+    get name() {
+        return this._name;
+    }
+
+    get weight() {
+        return this._weight;
+    }
+
+    get volume() {
+        return this._volume;
+    }
+
+    get carryingWeight() {
+        return this._carryingWeight;
+    }
+
+    get carryingVolume() {
+        return this._carryingVolume;
     }
 
     /**
@@ -65,7 +87,8 @@ class Vehicle {
 class Bicycle extends Vehicle {
 
     /**
-     * Creates new vehicle with with specified:
+     * Creates new bicycle with with specified:
+     * name, weight, volume, carryingVolume, carryingWeight, amountOfBaskets.
      * @param name
      * @param weight
      * @param volume
@@ -77,7 +100,12 @@ class Bicycle extends Vehicle {
     constructor(name, weight, volume, carryingWeight, carryingVolume, amountOfBaskets = 1) {
 
         super(name, weight, volume, carryingWeight, carryingVolume);
-        this.amountOfBascets = amountOfBaskets;
+        this._amountOfBaskets = amountOfBaskets;
+    }
+
+
+    get amountOfBaskets() {
+        return this._amountOfBaskets;
     }
 
     /**
@@ -87,7 +115,7 @@ class Bicycle extends Vehicle {
      */
     canCarry(vehicle) {
         return !!(this.isWeightMatches(vehicle)
-            && vehicle.volume <= this.carryingVolume/this.amountOfBascets);
+            && vehicle.volume <= this.carryingVolume/this.amountOfBaskets);
     }
 }
 
@@ -97,7 +125,8 @@ class Bicycle extends Vehicle {
 class Car extends Vehicle {
 
     /**
-     * Creates new vehicle with with specified:
+     * Creates new car with with specified:
+     * name, weight, volume, carryingVolume, carryingWeight, baggageContainerVolume.
      * @param name
      * @param weight
      * @param volume
@@ -112,8 +141,13 @@ class Car extends Vehicle {
         if (baggageContainerVolume >= carryingVolume) {
             throw "Baggage container volume must be less than total carrying volume.";
         }
+        this._baggageContainerVolume = baggageContainerVolume;
 
-        this.baggageContainerVolume = baggageContainerVolume;
+    }
+
+
+    get baggageContainerVolume() {
+        return this._baggageContainerVolume;
     }
 
     /**
@@ -124,5 +158,46 @@ class Car extends Vehicle {
     canCarry(vehicle) {
         return !!(super.isWeightMatches(vehicle)
             && vehicle.volume <= this.baggageContainerVolume);
+    }
+}
+
+/**
+ * Mechanical vehicle for cargo transportation.
+ * It carries things in trailers.
+ */
+class AutoTrain extends Car {
+
+    /**
+     * Creates new auto train with with specified:
+     * name, weight, volume, amountOfTrailers, maxTrailerWeight, maxTrailerVolume.
+     * @param name
+     * @param weight
+     * @param volume
+     * @param amountOfTrailers
+     * @param maxTrailerWeight
+     * @param maxTrailerVolume
+     */
+    constructor(name, weight, volume, amountOfTrailers, maxTrailerWeight, maxTrailerVolume) {
+
+        let carryingWeight = amountOfTrailers * maxTrailerWeight;
+        let carryingVolume = amountOfTrailers * maxTrailerVolume;
+
+        super(name, weight, volume, carryingWeight, carryingVolume, 0);
+        this._amountOfTrailers = amountOfTrailers;
+    }
+
+
+    get amountOfTrailers() {
+        return this._amountOfTrailers;
+    }
+
+    /**
+     * Returns true if this auto train can carry other specified vehicle, else returns false.
+     * @param vehicle
+     * @returns {boolean}
+     */
+    canCarry(vehicle) {
+        return !!(vehicle.weight <= this.carryingWeight/this.amountOfTrailers
+        && vehicle.volume <= this.carryingVolume/this.amountOfTrailers);
     }
 }
