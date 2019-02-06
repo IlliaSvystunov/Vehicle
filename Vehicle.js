@@ -206,7 +206,7 @@ class Tardis extends Vehicle {
      * Creates new tardis.
      */
     constructor() {
-        super("Tardis", 1, new Dimensions(1.5,1.5,2.5), 1,
+        super("Tardis", 0.01, new Dimensions(1.5,1.5,2.5), 1,
             new Dimensions(1.5,1.5,2.5));
     }
 

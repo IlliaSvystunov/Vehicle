@@ -27,6 +27,7 @@
             let aircraftCarrier = new AircraftCarrier(97000, aircraftCarrierDimensions,
                 20000, aircraftCarrierInnerStorageDimensions);
             let oilTrain = new OilTrain(9000, oilTrainDimensions, 900, oilTrainWagonDimensions);
+            let tardis = new Tardis();
 
             assert.equal(bicycle.canCarry(car), false,
                 "Putting car onto bicycle.");
@@ -45,6 +46,12 @@
 
             assert.equal(oilTrain.canCarry(aircraftCarrier), false,
                 "Putting aircraft carrier into oil train wagon.");
+
+            assert.equal(car.canCarry(tardis), true,
+                "Putting tardis onto car.");
+
+            assert.equal(tardis.canCarry(aircraftCarrier), true,
+                "Putting aircraft carrier into tardis.")
         });
     </script>
 </head>
