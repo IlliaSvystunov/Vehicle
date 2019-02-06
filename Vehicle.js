@@ -4,9 +4,7 @@
  * A thing used for transporting people or cargo.
  *
  * Includes cars, bicycles, ships, wagons and so on.
- * Common vehicle has name, volume, weight, carrying volume, carrying weight.
- *
- * @author Illia Svystunov.
+ * Common vehicle has name, dimensions, weight, carrying dimensions, carrying weight.
  */
 class Vehicle {
 
@@ -14,16 +12,12 @@ class Vehicle {
      * Creates new vehicle with specified parameters.
      *
      * @param {string} name.
-     * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} carryingVolume. It is a max volume value that vehicle can carry.
-     * @param {number} carryingWeight. It is a max weight value that vehicle can carry.
-     *
-     * Weight and carryingWeight scale in tons.
-     * Dimension and carryingVolume scale in cubic meters and characterized by.
-     * All numeric parameters must be positive.
+     * @param {number} weight. Measured in tons.
+     * @param {Dimensions} dimensions. Measured in cubic meters.
+     * @param {Dimensions} carryingDimensions. It is a max dimensions that fitsFor current vehicle. Measured in cubic meters.
+     * @param {number} carryingWeight. It is a max weight that fitsFor current vehicle. Measured in tons.
      */
-    constructor(name, weight, volume, carryingWeight, carryingVolume) {
+    constructor(name, weight, dimensions, carryingWeight, carryingDimensions) {
 
         if (weight <= 0) {
             throw "Weigh parameter must be positive";
@@ -34,9 +28,9 @@ class Vehicle {
 
         this._name = name;
         this._weight = weight;
-        this._volume = volume;
+        this._dimensions = dimensions;
         this._carryingWeight = carryingWeight;
-        this._carryingVolume = carryingVolume;
+        this._carryingDimensions = carryingDimensions;
     }
 
 
@@ -48,16 +42,16 @@ class Vehicle {
         return this._weight;
     }
 
-    get volume() {
-        return this._volume;
+    get dimensions() {
+        return this._dimensions;
     }
 
     get carryingWeight() {
         return this._carryingWeight;
     }
 
-    get carryingVolume() {
-        return this._carryingVolume;
+    get carryingDimensions() {
+        return this._carryingDimensions;
     }
 
     /**
@@ -69,7 +63,7 @@ class Vehicle {
      */
     canCarry(vehicle) {
         return !!(vehicle.weight <= this.carryingWeight
-            && this.volume.canPut(vehicle.volume));
+            && this.dimensions.fitsFor(vehicle.dimensions));
     }
 }
 
@@ -78,20 +72,17 @@ class Vehicle {
  *
  * Carries things only in baskets.
  * Cannot carry another vehicle.
- *
- * @author Illia Svystunov.
  */
 class Bicycle extends Vehicle {
 
     /**
      * Creates new bicycle.
      *
-     * @param {string} name.
-     * @param {number} weight.
-     * @param {Dimension} volume.
+     * @param {number} weight. Measured in tons.
+     * @param {Dimensions} dimensions. Measured in cubic meters.
      */
-    constructor(name, weight, volume) {
-        super(name, weight, volume, 0.1, new Dimension(0.2,0.1,0.1));
+    constructor(weight, dimensions) {
+        super("Bicycle", weight, dimensions, 0.1, new Dimensions(0.2,0.1,0.1));
     }
 
     /**
@@ -109,22 +100,19 @@ class Bicycle extends Vehicle {
  * Mechanical vehicle for individual or family using that rides on the road.
  *
  * Can carry other vehicles on top if they aren't very large.
- *
- * @author Illia Svystunov.
  */
 class Car extends Vehicle {
 
     /**
      * Creates new car.
      *
-     * @param {string} name.
-     * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} carryingVolume. It is a max volume value that vehicle can carry.
+     * @param {number} weight. Measured in tons.
+     * @param {Dimensions} dimensions. Measured in cubic meters.
+     * @param {Dimensions} carryingDimensions. It is a max dimensions value that vehicle can carry.
      * @param {number} carryingWeight. It is a max weight value that vehicle can carry.
      */
-    constructor(name, weight, volume, carryingWeight, carryingVolume) {
-        super(name, weight, volume, carryingWeight, carryingVolume);
+    constructor(weight, dimensions, carryingWeight, carryingDimensions) {
+        super("Car", weight, dimensions, carryingWeight, carryingDimensions);
     }
 
     /**
@@ -134,8 +122,8 @@ class Car extends Vehicle {
      * @returns {boolean}
      */
     canCarry(vehicle) {
-        return !!(vehicle.volume.width < this.volume.width
-        && vehicle.volume.length < this.volume.length
+        return !!(vehicle.dimensions.width < this.dimensions.width
+        && vehicle.dimensions.length < this.dimensions.length
         && vehicle.weight < this.carryingWeight);
     }
 }
@@ -144,21 +132,19 @@ class Car extends Vehicle {
  * Racing car.
  *
  * Doesn't have car trunk.
- * Doesn't created for carrying cargo.
- *
- * @author Illia Svystunov.
+ * Isn't created for carrying cargo.
  */
 class Bolid extends Car {
 
     /**
      * Creates new bolid with with specified.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
+     * @param {Dimensions} dimensions.
      */
-    constructor(name, weight, volume) {
-        super(name, weight, volume, 0.2, new Dimension(0.5,0.5,0.5));
+    constructor(weight, dimensions) {
+        super(weight, dimensions, 0.2, new Dimensions(0.5,0.5,0.5));
+        this._name = "Bolid";
     }
 
     /**
@@ -176,47 +162,43 @@ class Bolid extends Car {
  * Mechanical vehicle for cargo transportation.
  *
  * It carries things in trailer.
- *
- * @author Illia Svystunov.
  */
 class Wagon extends Car {
 
     /**
      * Creates new wagon.
      *
-     * @param {string} name.
-     * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} maxTrailerVolume. It is a max volume value that wagon can carry.
+     * @param {Dimensions} dimensions.
+     * @param {Dimensions} maxTrailerDimensions. It is a max dimensions value that wagon can carry.
      * @param {number} maxTrailerWeight. It is a max weight value that wagon can carry.
      */
-    constructor(name, weight, volume, maxTrailerWeight, maxTrailerVolume) {
+    constructor(weight, dimensions, maxTrailerWeight, maxTrailerDimensions) {
 
-        super(name, weight, volume, maxTrailerWeight, maxTrailerVolume);
+        super(weight, dimensions, maxTrailerWeight, maxTrailerDimensions);
+        this._name = "Wagon";
     }
 
     /**
-     * Returns 'true' specified vehicle fits trailer wagon's max volume and weight, otherwise returns 'false'.
+     * Returns 'true' specified vehicle fitsFor trailer wagon's max dimensions and weight, otherwise returns 'false'.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
      */
     canCarry(vehicle) {
+
         return !!(vehicle.weight <= this.carryingWeight
-        && this.carryingVolume.canPut(vehicle.volume));
+        && this.carryingDimensions.fitsFor(vehicle.dimensions));
     }
 }
 
 /**
- * Time machine and spacecraft. Abbreviation from "Time And Relative Dimension In Space".
+ * Time machine and spacecraft. Abbreviation from "Time And Relative Dimensions In Space".
  *
  * Invention of Time Masters race from science fiction "Doctor who".
  * Looks as usual police telephone box, but endless inside.
  * It can carry any material cargo.
  *
  * For more information see {@link https://en.wikipedia.org/wiki/TARDIS}.
- *
- * @author Illia Svystunov.
  */
 class Tardis extends Vehicle {
 
@@ -224,8 +206,8 @@ class Tardis extends Vehicle {
      * Creates new tardis.
      */
     constructor() {
-        super("Tardis", 1, new Dimension(1.5,1.5,2.5), 1,
-            new Dimension(1.5,1.5,2.5));
+        super("Tardis", 1, new Dimensions(1.5,1.5,2.5), 1,
+            new Dimensions(1.5,1.5,2.5));
     }
 
     /**
@@ -243,22 +225,19 @@ class Tardis extends Vehicle {
  * Vehicle that moves on water surface.
  *
  * Width of cargo cannot be greater than ship width, otherwise it will go under the water.
- *
- * @author Illia Svystunov.
  */
 class Ship extends Vehicle {
 
     /**
      * Creates new ship with with specified parameters.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} carryingVolume. It is a max volume value that ship can carry.
+     * @param {Dimensions} dimensions.
+     * @param {Dimensions} carryingDimensions. It is a max dimensions value that ship can carry.
      * @param {number} carryingWeight. It is a max weight value that ship can carry.
      */
-    constructor(name, weight, volume, carryingWeight, carryingVolume) {
-        super(name, weight, volume, carryingWeight, carryingVolume);
+    constructor(weight, dimensions, carryingWeight, carryingDimensions) {
+        super("Ship", weight, dimensions, carryingWeight, carryingDimensions);
     }
 
     /**
@@ -269,7 +248,7 @@ class Ship extends Vehicle {
      */
     canCarry(vehicle) {
         return super.canCarry(vehicle)
-            && vehicle.volume.width < this.volume.width;
+            && vehicle.dimensions.width < this.dimensions.width;
     }
 }
 
@@ -277,21 +256,19 @@ class Ship extends Vehicle {
  * Ship that is usually used for fishing.
  *
  * Not intended for transportation vehicles.
- *
- * @author Illia Svystunov.
  */
 class FishBoat extends Ship {
 
     /**
      * Creates new fish boat.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
+     * @param {Dimensions} dimensions.
      */
-    constructor(name, weight, volume) {
+    constructor(weight, dimensions) {
 
-        super(name, weight, volume, 0.2, new Dimension(3,1,0.5));
+        super(weight, dimensions, 0.2, new Dimensions(3,1,0.5));
+        this._name = "Fish boat";
     }
 
     /**
@@ -309,33 +286,31 @@ class FishBoat extends Ship {
  * Large ship for cargo transportation.
  *
  * Cargo is usually placed into containers.
- *
- * @author Illia Svystunov.
  */
 class SuperTanker extends Ship {
 
     /**
      * Creates new super tanker with specified parameters.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
+     * @param {Dimensions} dimensions.
      * @param {number} carryingWeight. It is a max weight value tanker can carry.
-     * @param {Dimension} containerVolume It is a max volume value that container can contain.
+     * @param {Dimensions} containerDimensions It is a max dimensions value that container can contain.
      */
-    constructor(name, weight, volume, carryingWeight, containerVolume) {
-        super(name, weight, volume, carryingWeight, containerVolume);
-        this.containerVolume = containerVolume;
+    constructor(weight, dimensions, carryingWeight, containerDimensions) {
+        super(weight, dimensions, carryingWeight, containerDimensions);
+        this._name = "Super tanker";
+        this.containerDimensions = containerDimensions;
     }
 
     /**
-     * Returns 'true' if specified vehicle fits container on board, otherwise returns 'false'.
+     * Returns 'true' if specified vehicle fitsFor container on board, otherwise returns 'false'.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
      */
     canCarry(vehicle) {
-        return !!(super.canCarry(vehicle) && this.containerVolume.canPut(vehicle.volume));
+        return !!(super.canCarry(vehicle) && this.containerDimensions.fitsFor(vehicle.dimensions));
     }
 }
 
@@ -345,35 +320,34 @@ class SuperTanker extends Ship {
  * Can carry very large, wide and heavy things.
  * All free space on board is used for carrying vehicles.
  * Also can contain vehicles inside.
- *
- * @author Illia Svystunov.
  */
 class AircraftCarrier extends Ship {
 
     /**
      * Creates new aircraft carrier with with specified:
-     * name, weight, volume, carrying volume, carrying weight.
+     * name, weight, dimensions, carrying dimensions, carrying weight.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} carryingVolume. It is a max volume value that aircraft carrier can accommodate inside.
+     * @param {Dimensions} dimensions.
+     * @param {Dimensions} carryingDimensions. It is a max dimensions value that aircraft carrier can accommodate inside.
      * @param {number} carryingWeight. It is a max weight value that aircraft carrier can carry.
      */
-    constructor(name, weight, volume, carryingWeight, carryingVolume) {
-        super(name, weight, volume, carryingWeight, carryingVolume);
+    constructor(weight, dimensions, carryingWeight, carryingDimensions) {
+        super(weight, dimensions, carryingWeight, carryingDimensions);
+        this._name = "Super tanker";
+
     }
 
     /**
-     * Returns 'true' if specified vehicle can be placed on board or fits inner space, otherwise returns 'false'.
+     * Returns 'true' if specified vehicle can be placed on board or fitsFor inner space, otherwise returns 'false'.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
      */
     canCarry(vehicle) {
-        return !!((vehicle.volume.length < this.volume.length
-            && vehicle.volume.width < this.volume.width
-            || this.volume.canPut(vehicle.volume))
+        return !!((vehicle.dimensions.length < this.dimensions.length
+            && vehicle.dimensions.width < this.dimensions.width
+            || this.dimensions.fitsFor(vehicle.dimensions))
             && vehicle.weight < this.carryingWeight);
     }
 }
@@ -383,25 +357,22 @@ class AircraftCarrier extends Ship {
  *
  * Usually transports people, coal, oil, mail and so on in wagons.
  * Cargo cannot be wider than wagon.
- *
- * @author Illia Svystunov.
  */
 class Train extends Vehicle {
 
     /**
      * Creates new train with specified parameters.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} maxWagonVolume. It is a max volume value that single wagon can accommodate.
+     * @param {Dimensions} dimensions.
+     * @param {Dimensions} maxWagonDimensions. It is a max dimensions value that single wagon can accommodate.
      * @param {number} maxWagonWeight. It is a max weight value that single wagon can carry.
      */
-    constructor(name, weight, volume, maxWagonWeight, maxWagonVolume) {
+    constructor(weight, dimensions, maxWagonWeight, maxWagonDimensions) {
 
-        super(name, weight, volume, maxWagonWeight, maxWagonVolume);
+        super("Train", weight, dimensions, maxWagonWeight, maxWagonDimensions);
 
-        this.maxWagonVolume = maxWagonVolume;
+        this.maxWagonDimensions = maxWagonDimensions;
         this.maxWagonWeight = maxWagonWeight;
     }
 
@@ -422,22 +393,21 @@ class Train extends Vehicle {
  *
  * Consists of large cylindrical wagons for liquids.
  * Isn't used for transporting solid things.
- *
- * @author Illia Svystunov.
  */
 class OilTrain extends Train {
 
     /**
      * Creates new oil train.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} maxWagonVolume. It is a max liquid volume that single wagon can accommodate.
+     * @param {Dimensions} dimensions.
+     * @param {Dimensions} maxWagonDimensions. It is a max liquid dimensions that single wagon can accommodate.
      * @param {number} maxWagonWeight. It is a max liquid weight value that single wagon can carry.
      */
-    constructor(name, weight, volume, maxWagonWeight, maxWagonVolume) {
-        super(name, weight, volume, maxWagonWeight, maxWagonVolume);
+    constructor(weight, dimensions, maxWagonWeight, maxWagonDimensions) {
+        super(weight, dimensions, maxWagonWeight, maxWagonDimensions);
+        this._name = "Oil train";
+
     }
 
     /**
@@ -456,22 +426,21 @@ class OilTrain extends Train {
  *
  * Except people can transport bags or carts.
  * Also can transport small vehicles as bicycles or scooters.
- *
- * @author Illia Svystunov.
  */
 class PassengerTrain extends Train {
 
     /**
      * Creates new passenger train.
      *
-     * @param {string} name.
      * @param {number} weight.
-     * @param {Dimension} volume.
-     * @param {Dimension} maxWagonVolume. It is a max volume value that single wagon can accommodate.
+     * @param {Dimensions} dimensions.
+     * @param {Dimensions} maxWagonDimensions. It is a max dimensions value that single wagon can accommodate.
      * @param {number} maxWagonWeight. It is a max weight value that single wagon can carry.
      */
-    constructor(name, weight, volume, maxWagonWeight, maxWagonVolume) {
-        super(name, weight, volume, maxWagonWeight, maxWagonVolume);
+    constructor(weight, dimensions, maxWagonWeight, maxWagonDimensions) {
+        super(weight, dimensions, maxWagonWeight, maxWagonDimensions);
+        this._name = "Passenger train";
+
     }
 
     /**
@@ -481,18 +450,19 @@ class PassengerTrain extends Train {
      * @returns {boolean}
      */
     canCarry(vehicle) {
-        return !!(vehicle.volume.width < this.volume.width/5
-        && vehicle.volume.length < this.volume.length/5
-        && vehicle.volume.height < this.volume.height/3
+        return !!(vehicle.dimensions.width < this.dimensions.width/5
+        && vehicle.dimensions.length < this.dimensions.length/5
+        && vehicle.dimensions.height < this.dimensions.height/3
         && vehicle.weight < this.maxWagonWeight/25);
     }
 }
 
 /**
  * Physical quantity that indicates the amount of occupied space.
+ *
  * It is determined by three quantities: length, width, height.
  */
-class Dimension {
+class Dimensions {
 
     constructor(length, width, height) {
 
@@ -501,11 +471,11 @@ class Dimension {
         this.height = height;
     }
 
-    canPut(volume) {
+    fitsFor(dimensions) {
 
-        return !!(this.length < volume.length
-            && this.width < volume.width
-            && this.height < volume.height)
+        return !!(this.length > dimensions.length
+            && this.width > dimensions.width
+            && this.height > dimensions.height)
     }
 
     calculateVolume() {
