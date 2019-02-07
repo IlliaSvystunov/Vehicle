@@ -11,11 +11,11 @@ class Vehicle {
     /**
      * Creates new vehicle with specified parameters.
      *
-     * @param {string} name.
-     * @param {number} weight. Measured in tons.
-     * @param {Dimensions} dimensions. Measured in cubic meters.
-     * @param {Dimensions} carryingDimensions. It is a max dimensions that fitsFor current vehicle. Measured in cubic meters.
-     * @param {number} carryingWeight. It is a max weight that fitsFor current vehicle. Measured in tons.
+     * @param {string} name Name of vehicle.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} carryingDimensions It is a max dimensions that fitsFor current vehicle. Measured in cubic meters.
+     * @param {number} carryingWeight It is a max weight that fitsFor current vehicle. Measured in tons.
      */
     constructor(name, weight, dimensions, carryingWeight, carryingDimensions) {
 
@@ -55,8 +55,7 @@ class Vehicle {
     }
 
     /**
-     * Returns 'true' if this vehicle can carry other specified vehicle,
-     * otherwise returns 'false'.
+     * Returns `true` if this vehicle can carry other specified vehicle, otherwise returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -78,15 +77,15 @@ class Bicycle extends Vehicle {
     /**
      * Creates new bicycle.
      *
-     * @param {number} weight. Measured in tons.
-     * @param {Dimensions} dimensions. Measured in cubic meters.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
      */
     constructor(weight, dimensions) {
         super("Bicycle", weight, dimensions, 0.1, new Dimensions(0.2,0.1,0.1));
     }
 
     /**
-     * Returns 'false' because bicycle cannot carry any vehicle.
+     * Returns `false` because bicycle cannot carry any vehicle.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -106,17 +105,18 @@ class Car extends Vehicle {
     /**
      * Creates new car.
      *
-     * @param {number} weight. Measured in tons.
-     * @param {Dimensions} dimensions. Measured in cubic meters.
-     * @param {Dimensions} carryingDimensions. It is a max dimensions value that vehicle can carry.
-     * @param {number} carryingWeight. It is a max weight value that vehicle can carry.
+     * @param {string} name Name of car.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} carryingDimensions It is a max dimensions value that car can carry. Measured in cubic meters.
+     * @param {number} carryingWeight It is a max weight value that vehicle can carry. Measured in tons.
      */
-    constructor(weight, dimensions, carryingWeight, carryingDimensions) {
-        super("Car", weight, dimensions, carryingWeight, carryingDimensions);
+    constructor(name, weight, dimensions, carryingWeight, carryingDimensions) {
+        super(name, weight, dimensions, carryingWeight, carryingDimensions);
     }
 
     /**
-     * Returns 'true' if specified vehicle can be placed on top of this car, 'false' otherwise.
+     * Returns `true` if specified vehicle can be placed on top of this car, `false` otherwise.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -137,18 +137,17 @@ class Car extends Vehicle {
 class Bolid extends Car {
 
     /**
-     * Creates new bolid with with specified.
+     * Creates new bolid.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
      */
     constructor(weight, dimensions) {
-        super(weight, dimensions, 0.2, new Dimensions(0.5,0.5,0.5));
-        this._name = "Bolid";
+        super("Bolid", weight, dimensions, 0.2, new Dimensions(0.5,0.5,0.5));
     }
 
     /**
-     * Returns 'false' because bolid cannot carry any vehicle.
+     * Returns `false` because bolid cannot carry any vehicle.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -168,18 +167,18 @@ class Wagon extends Car {
     /**
      * Creates new wagon.
      *
-     * @param {Dimensions} dimensions.
-     * @param {Dimensions} maxTrailerDimensions. It is a max dimensions value that wagon can carry.
-     * @param {number} maxTrailerWeight. It is a max weight value that wagon can carry.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} maxTrailerDimensions It is a max dimensions value that wagon can carry. Measured in cubic meters.
+     * @param {number} maxTrailerWeight It is a max weight value that wagon can carry. Measured in tons.
      */
     constructor(weight, dimensions, maxTrailerWeight, maxTrailerDimensions) {
 
-        super(weight, dimensions, maxTrailerWeight, maxTrailerDimensions);
-        this._name = "Wagon";
+        super("Wagon", weight, dimensions, maxTrailerWeight, maxTrailerDimensions);
     }
 
     /**
-     * Returns 'true' specified vehicle fitsFor trailer wagon's max dimensions and weight, otherwise returns 'false'.
+     * Returns `true` specified vehicle fitsFor trailer wagon's max dimensions and weight, otherwise returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -204,6 +203,8 @@ class Tardis extends Vehicle {
 
     /**
      * Creates new tardis.
+     *
+     * Tardis is 10 kg weight and 1.5*1.5*2.5 size.
      */
     constructor() {
         super("Tardis", 0.01, new Dimensions(1.5,1.5,2.5), 1,
@@ -211,7 +212,7 @@ class Tardis extends Vehicle {
     }
 
     /**
-     * Tardis can always carry any other vehicle, so it returns 'true'.
+     * Tardis can always carry any other vehicle, so it returns `true`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -231,17 +232,18 @@ class Ship extends Vehicle {
     /**
      * Creates new ship with with specified parameters.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
-     * @param {Dimensions} carryingDimensions. It is a max dimensions value that ship can carry.
-     * @param {number} carryingWeight. It is a max weight value that ship can carry.
+     * @param {string} name Name of ship.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} carryingDimensions It is a max dimensions value that ship can carry. Measured in cubic meters.
+     * @param {number} carryingWeight It is a max weight value that ship can carry. Measured in tons.
      */
-    constructor(weight, dimensions, carryingWeight, carryingDimensions) {
-        super("Ship", weight, dimensions, carryingWeight, carryingDimensions);
+    constructor(name, weight, dimensions, carryingWeight, carryingDimensions) {
+        super(name, weight, dimensions, carryingWeight, carryingDimensions);
     }
 
     /**
-     * Returns 'true' if this ship can carry other specified vehicle, otherwise returns 'false'.
+     * Returns `true` if this ship can carry other specified vehicle, otherwise returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -262,17 +264,16 @@ class FishBoat extends Ship {
     /**
      * Creates new fish boat.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
      */
     constructor(weight, dimensions) {
 
-        super(weight, dimensions, 0.2, new Dimensions(3,1,0.5));
-        this._name = "Fish boat";
+        super("Fish boat", weight, dimensions, 0.2, new Dimensions(3,1,0.5));
     }
 
     /**
-     * Boat hasn't place for other vehicles so it returns 'false'.
+     * Boat hasn't place for other vehicles so it returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -290,21 +291,20 @@ class FishBoat extends Ship {
 class SuperTanker extends Ship {
 
     /**
-     * Creates new super tanker with specified parameters.
+     * Creates new super tanker.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
-     * @param {number} carryingWeight. It is a max weight value tanker can carry.
-     * @param {Dimensions} containerDimensions It is a max dimensions value that container can contain.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {number} carryingWeight. It is a max weight value tanker can carry. Measured in tons.
+     * @param {Dimensions} containerDimensions It is a max dimensions value that container can contain. Measured in cubic meters.
      */
     constructor(weight, dimensions, carryingWeight, containerDimensions) {
-        super(weight, dimensions, carryingWeight, containerDimensions);
-        this._name = "Super tanker";
+        super("Super tanker", weight, dimensions, carryingWeight, containerDimensions);
         this.containerDimensions = containerDimensions;
     }
 
     /**
-     * Returns 'true' if specified vehicle fitsFor container on board, otherwise returns 'false'.
+     * Returns `true` if specified vehicle fits for container on board, otherwise returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -324,22 +324,19 @@ class SuperTanker extends Ship {
 class AircraftCarrier extends Ship {
 
     /**
-     * Creates new aircraft carrier with with specified:
-     * name, weight, dimensions, carrying dimensions, carrying weight.
+     * Creates new aircraft carrier.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
-     * @param {Dimensions} carryingDimensions. It is a max dimensions value that aircraft carrier can accommodate inside.
-     * @param {number} carryingWeight. It is a max weight value that aircraft carrier can carry.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} carryingDimensions It is a max dimensions value that aircraft carrier can accommodate inside. Measured in cubic meters.
+     * @param {number} carryingWeight It is a max weight value that aircraft carrier can carry. Measured in tons.
      */
     constructor(weight, dimensions, carryingWeight, carryingDimensions) {
-        super(weight, dimensions, carryingWeight, carryingDimensions);
-        this._name = "Super tanker";
-
+        super("Aircraft carrier", weight, dimensions, carryingWeight, carryingDimensions);
     }
 
     /**
-     * Returns 'true' if specified vehicle can be placed on board or fitsFor inner space, otherwise returns 'false'.
+     * Returns `true` if specified vehicle can be placed on board or fitsFor inner space, otherwise returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -361,23 +358,24 @@ class AircraftCarrier extends Ship {
 class Train extends Vehicle {
 
     /**
-     * Creates new train with specified parameters.
+     * Creates new train.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
-     * @param {Dimensions} maxWagonDimensions. It is a max dimensions value that single wagon can accommodate.
-     * @param {number} maxWagonWeight. It is a max weight value that single wagon can carry.
+     * @param {string} name Name of train.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} maxWagonDimensions It is a max dimensions value that single wagon can accommodate. Measured in cubic meters.
+     * @param {number} maxWagonWeight It is a max weight value that single wagon can carry. Measured in tons.
      */
-    constructor(weight, dimensions, maxWagonWeight, maxWagonDimensions) {
+    constructor(name, weight, dimensions, maxWagonWeight, maxWagonDimensions) {
 
-        super("Train", weight, dimensions, maxWagonWeight, maxWagonDimensions);
+        super(name, weight, dimensions, maxWagonWeight, maxWagonDimensions);
 
         this.maxWagonDimensions = maxWagonDimensions;
         this.maxWagonWeight = maxWagonWeight;
     }
 
     /**
-     * Returns 'true' if this train can carry other specified vehicle, otherwise returns 'false'.
+     * Returns `true` if this train can carry other specified vehicle, otherwise returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -399,19 +397,18 @@ class OilTrain extends Train {
     /**
      * Creates new oil train.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
-     * @param {Dimensions} maxWagonDimensions. It is a max liquid dimensions that single wagon can accommodate.
-     * @param {number} maxWagonWeight. It is a max liquid weight value that single wagon can carry.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} maxWagonDimensions It is a max liquid dimensions that single wagon can accommodate. Measured in cubic meters.
+     * @param {number} maxWagonWeight It is a max liquid weight value that single wagon can carry. Measured in tons.
      */
     constructor(weight, dimensions, maxWagonWeight, maxWagonDimensions) {
-        super(weight, dimensions, maxWagonWeight, maxWagonDimensions);
-        this._name = "Oil train";
+        super("Oil train", weight, dimensions, maxWagonWeight, maxWagonDimensions);
 
     }
 
     /**
-     * Returns 'false' because there is no way to place vehicle into cylindrical wagon.
+     * Returns `false` because there is no way to place vehicle into cylindrical wagon.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
@@ -432,28 +429,26 @@ class PassengerTrain extends Train {
     /**
      * Creates new passenger train.
      *
-     * @param {number} weight.
-     * @param {Dimensions} dimensions.
-     * @param {Dimensions} maxWagonDimensions. It is a max dimensions value that single wagon can accommodate.
-     * @param {number} maxWagonWeight. It is a max weight value that single wagon can carry.
+     * @param {number} weight Measured in tons.
+     * @param {Dimensions} dimensions Measured in cubic meters.
+     * @param {Dimensions} maxWagonDimensions It is a max dimensions value that single wagon can accommodate. Measured in cubic meters.
+     * @param {number} maxWagonWeight It is a max weight value that single wagon can carry. Measured in tons.
      */
     constructor(weight, dimensions, maxWagonWeight, maxWagonDimensions) {
-        super(weight, dimensions, maxWagonWeight, maxWagonDimensions);
-        this._name = "Passenger train";
-
+        super("Passenger train", weight, dimensions, maxWagonWeight, maxWagonDimensions);
     }
 
     /**
-     * Returns 'true' if specified vehicle can be placed in one-third wagon width, otherwise returns 'false'.
+     * Returns `true` if specified vehicle can be placed in one-third wagon width, otherwise returns `false`.
      *
      * @param vehicle {Vehicle}
      * @returns {boolean}
      */
     canCarry(vehicle) {
-        return !!(vehicle.dimensions.width < this.dimensions.width/5
-        && vehicle.dimensions.length < this.dimensions.length/5
+        return !!(vehicle.dimensions.width < this.dimensions.width
+        && vehicle.dimensions.length < this.dimensions.length
         && vehicle.dimensions.height < this.dimensions.height/3
-        && vehicle.weight < this.maxWagonWeight/25);
+        && vehicle.weight < this.maxWagonWeight);
     }
 }
 
@@ -464,6 +459,13 @@ class PassengerTrain extends Train {
  */
 class Dimensions {
 
+    /**
+     * Creates new dimensions object.
+     *
+     * @param {number} length
+     * @param {number} width
+     * @param {number} height
+     */
     constructor(length, width, height) {
 
         this.length = length;
@@ -471,6 +473,12 @@ class Dimensions {
         this.height = height;
     }
 
+    /**
+     * Returns `true` if specified dimensions can be placed into these dimensions. Otherwise `false`.
+     *
+     * @param {Dimensions} dimensions
+     * @returns {boolean}
+     */
     fitsFor(dimensions) {
 
         return !!(this.length > dimensions.length
@@ -478,6 +486,11 @@ class Dimensions {
             && this.height > dimensions.height)
     }
 
+    /**
+     * Returns volume of these dimensions scaled in cubic meters.
+     *
+     * @returns {number}
+     */
     calculateVolume() {
         return +(this.length * this.width * this.height);
     }
