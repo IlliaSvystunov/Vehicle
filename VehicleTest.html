@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vehicles</title>
+    <title>Vehicle Test</title>
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.9.1.css">
     <script src="https://code.jquery.com/qunit/qunit-2.9.1.js"></script>
     <script src="Vehicle.js"></script>
@@ -19,15 +19,20 @@
             let aircraftCarrierInnerStorageDimensions = new Dimensions(180, 40, 10);
             let oilTrainDimensions = new Dimensions(150, 5, 3);
             let oilTrainWagonDimensions = new Dimensions(15, 5, 3);
+            let bigCarDimensions = new Dimensions(8, 3.5, 4);
+            let trainWagonForTardisDimensions = new Dimensions(1.5, 1.5, 2.5);
 
             let bicycle = new Bicycle(0.15, bicycleDimensions);
-            let car = new Car(4, carDimensions, 0.6, bicycleDimensions);
+            let car = new Car("Car", 4, carDimensions, 0.6, bicycleDimensions);
             let bolid = new Bolid(0.7, bolidDimensions);
             let wagon = new Wagon(9, wagonDimensions, 30, wagonTrailerDimensions);
             let aircraftCarrier = new AircraftCarrier(97000, aircraftCarrierDimensions,
                 20000, aircraftCarrierInnerStorageDimensions);
             let oilTrain = new OilTrain(9000, oilTrainDimensions, 900, oilTrainWagonDimensions);
             let tardis = new Tardis();
+            let bigCar = new Car("Big car", 30, bigCarDimensions, 5, carDimensions);
+            let trainForTardises = new Train("Train", 200, oilTrainDimensions,
+                1, trainWagonForTardisDimensions);
 
             assert.equal(bicycle.canCarry(car), false,
                 "Putting car onto bicycle.");
@@ -51,7 +56,13 @@
                 "Putting tardis onto car.");
 
             assert.equal(tardis.canCarry(aircraftCarrier), true,
-                "Putting aircraft carrier into tardis.")
+                "Putting aircraft carrier into tardis.");
+
+            assert.equal(wagon.canCarry(bigCar), true,
+                "Putting big car into wagon's trailer (boundary case).");
+
+            assert.equal(trainForTardises.canCarry(tardis), true,
+                "Putting tardis into place as it's dimensions (boundary case).")
         });
     </script>
 </head>

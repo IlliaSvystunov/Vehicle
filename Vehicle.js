@@ -108,7 +108,7 @@ class Car extends Vehicle {
      * @param {string} name Name of car.
      * @param {number} weight Measured in tons.
      * @param {Dimensions} dimensions Measured in cubic meters.
-     * @param {Dimensions} carryingDimensions It is a max dimensions value that car can carry. Measured in cubic meters.
+     * @param {Dimensions} carryingDimensions It is a max dimensions value that car can carry inside trunk. Measured in cubic meters.
      * @param {number} carryingWeight It is a max weight value that vehicle can carry. Measured in tons.
      */
     constructor(name, weight, dimensions, carryingWeight, carryingDimensions) {
@@ -481,9 +481,9 @@ class Dimensions {
      */
     fitsFor(dimensions) {
 
-        return !!(this.length > dimensions.length
-            && this.width > dimensions.width
-            && this.height > dimensions.height)
+        return !!(this.length >= dimensions.length
+            && this.width >= dimensions.width
+            && this.height >= dimensions.height)
     }
 
     /**
